@@ -39,5 +39,8 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'lewis6991/gitsigns.nvim' 
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
-
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'numToStr/Comment.nvim'
 vim.call('plug#end')

@@ -18,3 +18,6 @@ set("n", "<Leader>n", ":BufferNext<CR>", ns)
 set("n", "<A-1>", ":BufferGoto 1<CR>", ns)
 set("n", "<A-2>", ":BufferGoto 2<CR>", ns)
 set("n", "<A-3>", ":BufferGoto 3<CR>", ns)
+
+
+set("n", "<Leader>ff", ":Telescope find_files<CR>", ns)
