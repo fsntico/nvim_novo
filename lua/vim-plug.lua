@@ -48,4 +48,6 @@ Plug 'NvChad/nvim-colorizer.lua'
 Plug 'williamboman/mason.nvim'
 Plug 'sbdchd/neoformat'
 Plug ('neoclide/coc.nvim', {['branch']='release'})
+Plug 'mvllow/modes.nvim'
+Plug 'pocco81/auto-save.nvim'
 vim.call('plug#end')
