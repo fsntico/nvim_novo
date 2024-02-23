@@ -1,0 +1,1 @@
+git clone git@github.com:fsntico/nvim_novo.git $env:LOCALAPPDATA\nvim
