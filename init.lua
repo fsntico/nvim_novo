@@ -2,6 +2,9 @@ require 'settings'
 require 'vim-plug'
 require 'keys'
 vim.cmd[[colorscheme tokyonight]]
+vim.cmd [[inoremap <silent><expr> <C-Tab> pumvisible() ? "\<C-y>" : "\<C-Tab>"]]
+
+
 local powershell_options = {
   shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
   shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
@@ -204,3 +207,109 @@ enabled = true, -- start auto-save when the plugin is loaded (i.e. when your pac
 		after_saving = nil -- ran after doing the actual save
     	}
 })
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+
+local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+     formatting = {
+        format = require('lspkind').cmp_format({
+            mode = "symbol",
+            maxwidth = 50,
+            ellipsis_char = '...',
+            symbol_map = { Codeium = "", }
+    })   
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    -- mapping = cmp.mapping.preset.insert({
+    --   ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    --   ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    --   ['<C-Space>'] = cmp.mapping.complete(),
+    --   ['<C-e>'] = cmp.mapping.abort(),
+    --   ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    -- }),
+    mapping = {
+        ["<CR>"] = cmp.mapping.confirm { select = true },
+        ["<C-Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          elseif has_words_before() then
+            cmp.complete()
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
