@@ -33,5 +33,6 @@ Plug 'mvllow/modes.nvim'
 Plug 'pocco81/auto-save.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'onsails/lspkind.nvim'
+Plug 'm4xshen/autoclose.nvim'
 
 vim.call('plug#end')

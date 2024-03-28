@@ -5,18 +5,18 @@ vim.cmd[[colorscheme tokyonight]]
 vim.cmd [[inoremap <silent><expr> <C-Tab> pumvisible() ? "\<C-y>" : "\<C-Tab>"]]
 
 
-local powershell_options = {
-  shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
-  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-  shellquote = "",
-  shellxquote = "",
-}
-
-for option, value in pairs(powershell_options) do
-  vim.opt[option] = value
-end
+-- local powershell_options = {
+--    shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+--    shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+--    shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+--    shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+--    shellquote = "",
+--    shellxquote = "",
+-- }
+--
+-- for option, value in pairs(powershell_options) do
+--   vim.opt[option] = value
+-- end
 require("toggleterm").setup{
     -- size can be a number or function which is passed the current terminal
     size = 22,
@@ -312,4 +312,29 @@ local cmp = require'cmp'
     }, {
       { name = 'buffer' },
     })
+  })
+
+require("autoclose").setup({
+   keys = {
+      ["("] = { escape = false, close = true, pair = "()" },
+      ["["] = { escape = false, close = true, pair = "[]" },
+      ["{"] = { escape = false, close = true, pair = "{}" },
+
+      [">"] = { escape = true, close = false, pair = "<>" },
+      [")"] = { escape = true, close = false, pair = "()" },
+      ["]"] = { escape = true, close = false, pair = "[]" },
+      ["}"] = { escape = true, close = false, pair = "{}" },
+
+      ['"'] = { escape = true, close = true, pair = '""' },
+      ["'"] = { escape = true, close = true, pair = "''" },
+      ["`"] = { escape = true, close = true, pair = "``" },
+   },
+   options = {
+      disabled_filetypes = { "text" },
+      disable_when_touch = false,
+      touch_regex = "[%w(%[{]",
+      pair_spaces = false,
+      auto_indent = true,
+      disable_command_mode = false,
+   },
   })
